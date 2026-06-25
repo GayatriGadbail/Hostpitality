@@ -1,20 +1,28 @@
 const mysql = require("mysql2");
-require("dotenv").config();
 
-const db = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+
+const db=mysql.createConnection({
+
+host:"localhost",
+
+user:"root",
+
+password:"YOUR_PASSWORD",
+
+database:"stayhub"
+
 });
 
-db.connect((err) => {
-  if (err) {
-    console.log("Database Connection Failed");
-    console.log(err);
-  } else {
-    console.log("Database Connected");
-  }
+
+db.connect((err)=>{
+
+if(err)
+console.log(err);
+
+else
+console.log("MySQL Connected");
+
 });
 
-module.exports = db;
+
+module.exports=db;
