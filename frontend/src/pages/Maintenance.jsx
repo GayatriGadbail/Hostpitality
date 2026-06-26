@@ -1,11 +1,13 @@
 import "./Maintenance.css";
+import { useState } from "react";
+import AssignNow from "../pages/AssignNow";
+
 import {
   FaTools,
   FaExclamationTriangle,
   FaClipboardList,
   FaCheckCircle,
   FaClock,
-  FaUserCog,
   FaBolt,
   FaTint,
   FaSnowflake,
@@ -13,6 +15,9 @@ import {
 } from "react-icons/fa";
 
 function Maintenance() {
+  const [showRequestPopup, setShowRequestPopup] = useState(false);
+  const [selectedIssue, setSelectedIssue] = useState(null);
+  
   const criticalIssues = [
     {
       room: "Room 205",
@@ -40,28 +45,30 @@ function Maintenance() {
     },
   ];
 
-  const requests = [
-    {
-      room: "Room 101",
-      issue: "TV Not Working",
-      status: "Pending",
-    },
-    {
-      room: "Room 302",
-      issue: "Toilet Flush Issue",
-      status: "In Progress",
-    },
-    {
-      room: "Room 204",
-      issue: "Hot Water Not Available",
-      status: "In Progress",
-    },
-    {
-      room: "Room 207",
-      issue: "Light Flickering",
-      status: "Completed",
-    },
-  ];
+const [requests, setRequests] = useState([
+  {
+    room: "Room 101",
+    issue: "TV Not Working",
+    status: "Pending",
+  },
+  {
+    room: "Room 302",
+    issue: "Toilet Flush Issue",
+    status: "In Progress",
+  },
+  {
+    room: "Room 204",
+    issue: "Hot Water Not Available",
+    status: "In Progress",
+  },
+  {
+    room: "Room 207",
+    issue: "Light Flickering",
+    status: "Completed",
+  },
+]); // 👈 हे CLOSE आहे
+
+
 
   const technicians = [
     {
@@ -100,14 +107,12 @@ function Maintenance() {
             Export Report
           </button>
 
-          <button
-            className="primary-btn"
-            onClick={() =>
-              alert("New Request Opened")
-            }
-          >
-            + New Request
-          </button>
+         <button
+className="primary-btn"
+onClick={() => setShowRequestPopup(true)}
+>
++ New Request
+</button>
         </div>
       </div>
 
@@ -167,15 +172,15 @@ function Maintenance() {
                 <span>{item.priority}</span>
               </div>
 
-              <button
-                onClick={() =>
-                  alert(
-                    `Assigned ${item.room}`
-                  )
-                }
-              >
-                Assign Now
-              </button>
+            <button
+  className="assign-btn"
+  onClick={()=>{
+      setSelectedIssue(item);
+      setShowRequestPopup(true);
+  }}
+>
+    Assign Now
+</button>
             </div>
           ))}
         </div>
@@ -339,6 +344,176 @@ function Maintenance() {
 
         </div>
       </div>
+      {showRequestPopup && (
+
+<div className="popup-overlay">
+
+<div className="request-popup">
+
+<div className="popup-header">
+
+<h2>New Maintenance Request</h2>
+
+<button onClick={()=>setShowRequestPopup(false)}>
+✖
+</button>
+
+</div>
+
+
+<div className="form-grid">
+
+<div className="input-box">
+  <label>Room Number</label>
+
+  <select defaultValue="">
+    <option value="" disabled>
+      Select Room
+    </option>
+
+    <option value="101">Room 101</option>
+    <option value="102">Room 102</option>
+    <option value="103">Room 103</option>
+    <option value="104">Room 104</option>
+    <option value="105">Room 105</option>
+  </select>
+</div>
+  
+
+
+<div className="input-box">
+<label>Issue Category</label>
+
+<select>
+<option>Electrical</option>
+<option>Plumbing</option>
+<option>HVAC</option>
+<option>Furniture</option>
+<option>Door Lock</option>
+<option>TV</option>
+<option>Other</option>
+</select>
+
+</div>
+
+
+<div className="input-box">
+<label>Priority</label>
+
+<select>
+<option>Low</option>
+<option>Medium</option>
+<option>High</option>
+<option>Critical</option>
+</select>
+
+</div>
+
+
+<div className="input-box">
+<label>Reported By</label>
+<input placeholder="Customer Name"/>
+</div>
+
+
+<div className="input-box full">
+<label>Description</label>
+
+<textarea
+rows="5"
+placeholder="Describe issue..."
+></textarea>
+
+</div>
+
+
+<div className="input-box">
+<label>Assign Technician</label>
+
+<select>
+
+<option>Auto Assign</option>
+
+<option>Ramesh Kumar</option>
+
+<option>Suresh Yadav</option>
+
+<option>Amit Singh</option>
+<option>Neha Singh</option>
+
+
+</select>
+
+<div className="input-box">
+<label>Upload File</label>
+
+<input
+type="file"
+accept=".jpg,.jpeg,.png,.pdf"
+/>
+
+<small>Upload issue photo or PDF (Max 5 MB)</small>
+</div>
+
+</div>
+
+
+<div className="input-box">
+<label>Expected Date</label>
+<input type="date"/>
+</div>
+
+</div>
+
+
+<div className="popup-footer">
+
+<button
+className="cancel-btn"
+onClick={()=>setShowRequestPopup(false)}
+>
+Cancel
+</button>
+
+<button
+  className="save-btn"
+  onClick={() => {
+    const roomSelect = document.querySelector(".input-box select");
+    const issueSelect = document.querySelectorAll(".input-box select")[1];
+
+    if (!roomSelect.value || !issueSelect.value) return;
+
+    setRequests([
+      {
+        room: "Room " + roomSelect.value,
+        issue: issueSelect.value,
+        status: "Pending",
+      },
+      ...requests,
+    ]);
+
+    setShowRequestPopup(false);
+  }}
+>
+  Create Request
+</button>
+
+</div>
+{showRequestPopup && (
+    <AssignNow
+        issue={selectedIssue}
+        onClose={()=>{
+            setShowRequestPopup(false);
+            setSelectedIssue(null);
+        }}
+    />
+)}
+
+</div>
+
+</div>
+
+)}
 
     </div>
   );

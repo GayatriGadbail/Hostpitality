@@ -233,7 +233,7 @@ const todayActivities = [
       <aside className="sidebar">
 
         <div className="logo">
-          <h2>🏨 StayHub</h2>
+          <h2>StayHub</h2>
           <p>Hospitality Management System</p>
         </div>
 

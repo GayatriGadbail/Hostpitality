@@ -123,6 +123,8 @@
   color:#16a34a;
 }
 
+
+
 /* =========================
    FILTER BOX
 ========================= */
@@ -422,12 +424,19 @@ tbody tr:hover {
   margin-bottom: 20px;
 }
 
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(2,1fr);
-  gap: 16px;
+.error-text {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+  display: block;
 }
 
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  align-items: start;
+}
 .form-grid input,
 .form-grid select,
 .form-grid textarea {

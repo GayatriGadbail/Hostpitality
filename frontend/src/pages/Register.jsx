@@ -92,8 +92,8 @@ if (Object.keys(newErrors).length === 0) {
       <div className="register-card">
 
         {/* LEFT PANEL */}
-        <div className="left-panel">
-          <div className="overlay">
+        <div className="register-left-panel">
+          <div className="register-overlay">
 
             <div className="logo">
               <h2>StayHub</h2>
@@ -121,7 +121,7 @@ if (Object.keys(newErrors).length === 0) {
         </div>
 
         {/* RIGHT PANEL */}
-        <div className="right-panel">
+        <div className="register-right-panel">
 
           <div className="register-icon">
             <FaUser />
@@ -129,7 +129,7 @@ if (Object.keys(newErrors).length === 0) {
 
           <h2>Register</h2>
 
-          <span className="subtitle">
+          <span className="register-subtitle">
             Fill in the details to create your account
           </span>
 
@@ -237,7 +237,7 @@ if (Object.keys(newErrors).length === 0) {
           </form>
 
           {/* Divider */}
-          <div className="divider">
+          <div className="register-divider">
             <span>OR</span>
           </div>
 

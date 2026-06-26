@@ -37,6 +37,7 @@ const cityData = {
 function Customers() {
   const [showModal, setShowModal] = useState(false);
   const [editingIndex, setEditingIndex] = useState(null);
+  const [errors, setErrors] = useState({});
 
   const [search, setSearch] = useState("");
 
@@ -123,11 +124,16 @@ function Customers() {
   };
 
   const handleChange = (e) => {
-    setCustomerForm({
-      ...customerForm,
-      [e.target.name]: e.target.value,
-    });
-  };
+  setCustomerForm({
+    ...customerForm,
+    [e.target.name]: e.target.value,
+  });
+
+  setErrors({
+    ...errors,
+    [e.target.name]: "",
+  });
+};
 
   const resetForm = () => {
     setCustomerForm({
@@ -146,30 +152,44 @@ function Customers() {
   };
 
   const addCustomer = () => {
-    if (!customerForm.guestName) {
-      alert("Guest Name Required");
-      return;
-    }
+  let newErrors = {};
 
-    const customer = {
-      ...customerForm,
-      status: "Checked In",
-      amount: "₹0",
-    };
+  if (!customerForm.guestName) {
+    newErrors.guestName = "Guest Name is required";
+  }
 
-    if (editingIndex !== null) {
-      const updated = [...customers];
-      updated[editingIndex] = customer;
-      setCustomers(updated);
-      setEditingIndex(null);
-    } else {
-      setCustomers([...customers, customer]);
-    }
+  if (!customerForm.email) {
+    newErrors.email = "Email is required";
+  }
 
-    resetForm();
-    setShowModal(false);
+  if (!customerForm.phone) {
+    newErrors.phone = "Phone is required";
+  }
+
+  if (Object.keys(newErrors).length > 0) {
+    setErrors(newErrors);
+    return;
+  }
+
+  const customer = {
+    ...customerForm,
+    status: "Checked In",
+    amount: "₹0",
   };
 
+  if (editingIndex !== null) {
+    const updated = [...customers];
+    updated[editingIndex] = customer;
+    setCustomers(updated);
+    setEditingIndex(null);
+  } else {
+    setCustomers([...customers, customer]);
+  }
+
+  resetForm();
+  setErrors({});
+  setShowModal(false);
+};
   const deleteCustomer = (index) => {
     const updated = customers.filter((_, i) => i !== index);
     setCustomers(updated);
@@ -528,28 +548,35 @@ function Customers() {
 
             <div className="form-grid">
 
-              <input
-                name="guestName"
-                placeholder="Guest Name"
-                value={customerForm.guestName}
-                onChange={handleChange}
-              />
+           <input
+  name="guestName"
+  placeholder="Guest Name"
+  value={customerForm.guestName}
+  onChange={handleChange}
+/>
 
-              <input
-                name="email"
-                placeholder="Email"
-                value={customerForm.email}
-                onChange={handleChange}
-              />
+{errors.guestName && (
+  <span className="error-text">{errors.guestName}</span>
+)}
+<input
+  name="email"
+  placeholder="Email"
+  value={customerForm.email}
+  onChange={handleChange}
+/>
 
-              <input
-                name="phone"
-                placeholder="Phone"
-                value={customerForm.phone}
-                onChange={handleChange}
-              />
+{errors.email && (
+  <span className="error-text">{errors.email}</span>
+)}
 
-              <input
+ <input
+    className="phone-input"
+    name="phone"
+    placeholder="Phone"
+    value={customerForm.phone}
+    onChange={handleChange}
+/>
+     <input
                 type="date"
                 value={customerForm.dob}
                 onChange={handleDOB}
